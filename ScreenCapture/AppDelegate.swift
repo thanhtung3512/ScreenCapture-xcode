@@ -29,8 +29,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var waitforresponse = Bool(false)
     var LOG_CONDITION = Bool(true)
     var publicIPAddress = String("")
-    //let popover = NSPopover()
-    //let notification = QuotesViewController()
+    // Popup menu
+    let popover = NSPopover()
+    let notification = QuotesViewController()
+    var eventMonitor: EventMonitor?
     
     let screen = ScreenShot()
     var applicationSupportDirectory = String("")
@@ -54,8 +56,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSDistributedNotificationCenter.defaultCenter().postNotificationName("killme", object: NSBundle.mainBundle().bundleIdentifier!)
         }
         
-        // popup menu
-        //popover.contentViewController = notification
+        // popup menu params
+        popover.contentViewController = notification
+        eventMonitor = EventMonitor(mask:[.LeftMouseDownMask,.RightMouseDownMask]) { [unowned self] event in
+            if self.popover.shown {
+                self.closePopover(event)
+            }
+        }
+        eventMonitor?.start()
         //print(NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!)
         
         // Get public IP Address
@@ -410,11 +418,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // change image button to pause or resume
     func pauseOrResumeLog(sender: AnyObject){
-        /*if popover.shown {
-        closePopover(sender)
-        } else {
-        showPopover(sender)
-        }*/
         //print("pause clicked")
         self.countdown_waitforinput = self.twoSeconds
         self.countdown_waittosenddata = self.thirtySeconds
@@ -426,9 +429,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.toolTip = (self.LOG_CONDITION) ? "The logger is RUNNING" : "The logger is STOPPED"
             if self.LOG_CONDITION{
                 self.timer_waittosenddata = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "doAutoSendData", userInfo: nil, repeats: true)
+                // toggle popup status
+                if popover.shown {
+                    closePopover(sender)
+                }
+                
             }
             else
             {
+                // toggle popup status
+                if !popover.shown {
+                    showPopover(sender)
+                }
                 //popover.showRelativeToRect(button.bounds, ofView: button, preferredEdge: NSRectEdge.MinY)
             }
         }
@@ -520,23 +532,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return body
     }
     
-    /*func showPopover(sender: AnyObject?) {
+    func showPopover(sender: AnyObject?) {
         if let button = statusItem.button {
             popover.showRelativeToRect(button.bounds, ofView: button, preferredEdge: NSRectEdge.MinY)
         }
+        eventMonitor?.start()
     }
     
     func closePopover(sender: AnyObject?) {
         popover.performClose(sender)
+        eventMonitor?.stop()
     }
-    
-    func togglePopover(sender: AnyObject?) {
-        if popover.shown {
-            closePopover(sender)
-        } else {
-            showPopover(sender)
-        }
-    }*/
     
     func macSerialNumber() -> String {
         

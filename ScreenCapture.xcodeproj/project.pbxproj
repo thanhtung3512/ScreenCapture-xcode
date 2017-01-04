@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F044EB41E1D527800B7CFB9 /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F044EB31E1D527800B7CFB9 /* EventMonitor.swift */; };
 		3F0D587F1E1278D100E8F1D8 /* QuotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0D587D1E1278D100E8F1D8 /* QuotesViewController.swift */; };
 		3F0D58801E1278D100E8F1D8 /* QuotesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F0D587E1E1278D100E8F1D8 /* QuotesViewController.xib */; };
 		3F0D58821E12F29D00E8F1D8 /* ScreenShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0D58811E12F29C00E8F1D8 /* ScreenShot.swift */; };
@@ -56,6 +57,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3F044EB31E1D527800B7CFB9 /* EventMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventMonitor.swift; path = Quote/EventMonitor.swift; sourceTree = "<group>"; };
 		3F0D587D1E1278D100E8F1D8 /* QuotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QuotesViewController.swift; path = Quote/QuotesViewController.swift; sourceTree = "<group>"; };
 		3F0D587E1E1278D100E8F1D8 /* QuotesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = QuotesViewController.xib; path = Quote/QuotesViewController.xib; sourceTree = "<group>"; };
 		3F0D58811E12F29C00E8F1D8 /* ScreenShot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScreenShot.swift; path = Feature/ScreenShot.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				3F0D587E1E1278D100E8F1D8 /* QuotesViewController.xib */,
 				3F0D58811E12F29C00E8F1D8 /* ScreenShot.swift */,
 				3F0D58831E13024300E8F1D8 /* DoAppleScript.swift */,
+				3F044EB31E1D527800B7CFB9 /* EventMonitor.swift */,
 			);
 			path = ScreenCapture;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F0D58841E13024300E8F1D8 /* DoAppleScript.swift in Sources */,
+				3F044EB41E1D527800B7CFB9 /* EventMonitor.swift in Sources */,
 				49356C901DC0ABE7003CCCB1 /* AppDelegate.swift in Sources */,
 				3F0D58821E12F29D00E8F1D8 /* ScreenShot.swift in Sources */,
 				3F0D587F1E1278D100E8F1D8 /* QuotesViewController.swift in Sources */,
