@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F0D587F1E1278D100E8F1D8 /* QuotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0D587D1E1278D100E8F1D8 /* QuotesViewController.swift */; };
+		3F0D58801E1278D100E8F1D8 /* QuotesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F0D587E1E1278D100E8F1D8 /* QuotesViewController.xib */; };
+		3F0D58821E12F29D00E8F1D8 /* ScreenShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0D58811E12F29C00E8F1D8 /* ScreenShot.swift */; };
+		3F0D58841E13024300E8F1D8 /* DoAppleScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0D58831E13024300E8F1D8 /* DoAppleScript.swift */; };
+		3F4E38391E154A330028E8B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4E38381E154A330028E8B9 /* AppDelegate.swift */; };
+		3F4E383D1E154A330028E8B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F4E383C1E154A330028E8B9 /* Assets.xcassets */; };
+		3F4E38401E154A330028E8B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F4E383E1E154A330028E8B9 /* Main.storyboard */; };
+		3F4E384A1E154B840028E8B9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49356CBB1DC205AA003CCCB1 /* Cocoa.framework */; };
+		3F4E384C1E154E7C0028E8B9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4E384B1E154E7C0028E8B9 /* Foundation.framework */; };
+		3F4E384E1E154E810028E8B9 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4E384D1E154E810028E8B9 /* AppKit.framework */; };
+		3FE6102C1E156573008FA504 /* LauncherApplication.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F4E38361E154A330028E8B9 /* LauncherApplication.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		49356C901DC0ABE7003CCCB1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49356C8F1DC0ABE7003CCCB1 /* AppDelegate.swift */; };
 		49356C921DC0ABE7003CCCB1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49356C911DC0ABE7003CCCB1 /* Assets.xcassets */; };
 		49356C951DC0ABE7003CCCB1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49356C931DC0ABE7003CCCB1 /* MainMenu.xib */; };
@@ -31,7 +42,32 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3FE6102B1E156569008FA504 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LoginItems;
+			dstSubfolderSpec = 1;
+			files = (
+				3FE6102C1E156573008FA504 /* LauncherApplication.app in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		3F0D587D1E1278D100E8F1D8 /* QuotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QuotesViewController.swift; path = Quote/QuotesViewController.swift; sourceTree = "<group>"; };
+		3F0D587E1E1278D100E8F1D8 /* QuotesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = QuotesViewController.xib; path = Quote/QuotesViewController.xib; sourceTree = "<group>"; };
+		3F0D58811E12F29C00E8F1D8 /* ScreenShot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScreenShot.swift; path = Feature/ScreenShot.swift; sourceTree = "<group>"; };
+		3F0D58831E13024300E8F1D8 /* DoAppleScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DoAppleScript.swift; path = Feature/DoAppleScript.swift; sourceTree = "<group>"; };
+		3F4E38361E154A330028E8B9 /* LauncherApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LauncherApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F4E38381E154A330028E8B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3F4E383C1E154A330028E8B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3F4E383F1E154A330028E8B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3F4E38411E154A330028E8B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3F4E38451E154A770028E8B9 /* LauncherApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LauncherApplication.entitlements; sourceTree = "<group>"; };
+		3F4E384B1E154E7C0028E8B9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3F4E384D1E154E810028E8B9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		49356C8C1DC0ABE7003CCCB1 /* ScreenCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49356C8F1DC0ABE7003CCCB1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49356C911DC0ABE7003CCCB1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -43,13 +79,26 @@
 		49356CA61DC0ABE7003CCCB1 /* ScreenCaptureUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScreenCaptureUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		49356CAA1DC0ABE7003CCCB1 /* ScreenCaptureUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCaptureUITests.swift; sourceTree = "<group>"; };
 		49356CAC1DC0ABE7003CCCB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		49356CBB1DC205AA003CCCB1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		49356CBD1DC205B5003CCCB1 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		49356CBF1DC208A2003CCCB1 /* ScreenCapture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ScreenCapture.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3F4E38331E154A320028E8B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		49356C891DC0ABE7003CCCB1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F4E384E1E154E810028E8B9 /* AppKit.framework in Frameworks */,
+				3F4E384C1E154E7C0028E8B9 /* Foundation.framework in Frameworks */,
+				3F4E384A1E154B840028E8B9 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,12 +119,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F4E38371E154A330028E8B9 /* LauncherApplication */ = {
+			isa = PBXGroup;
+			children = (
+				3F4E38451E154A770028E8B9 /* LauncherApplication.entitlements */,
+				3F4E38381E154A330028E8B9 /* AppDelegate.swift */,
+				3F4E383C1E154A330028E8B9 /* Assets.xcassets */,
+				3F4E383E1E154A330028E8B9 /* Main.storyboard */,
+				3F4E38411E154A330028E8B9 /* Info.plist */,
+			);
+			path = LauncherApplication;
+			sourceTree = "<group>";
+		};
 		49356C831DC0ABE7003CCCB1 = {
 			isa = PBXGroup;
 			children = (
+				3F4E384D1E154E810028E8B9 /* AppKit.framework */,
+				3F4E384B1E154E7C0028E8B9 /* Foundation.framework */,
+				49356CBD1DC205B5003CCCB1 /* ServiceManagement.framework */,
+				49356CBB1DC205AA003CCCB1 /* Cocoa.framework */,
 				49356C8E1DC0ABE7003CCCB1 /* ScreenCapture */,
 				49356C9E1DC0ABE7003CCCB1 /* ScreenCaptureTests */,
 				49356CA91DC0ABE7003CCCB1 /* ScreenCaptureUITests */,
+				3F4E38371E154A330028E8B9 /* LauncherApplication */,
 				49356C8D1DC0ABE7003CCCB1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,6 +152,7 @@
 				49356C8C1DC0ABE7003CCCB1 /* ScreenCapture.app */,
 				49356C9B1DC0ABE7003CCCB1 /* ScreenCaptureTests.xctest */,
 				49356CA61DC0ABE7003CCCB1 /* ScreenCaptureUITests.xctest */,
+				3F4E38361E154A330028E8B9 /* LauncherApplication.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,10 +160,15 @@
 		49356C8E1DC0ABE7003CCCB1 /* ScreenCapture */ = {
 			isa = PBXGroup;
 			children = (
+				49356CBF1DC208A2003CCCB1 /* ScreenCapture.entitlements */,
 				49356C8F1DC0ABE7003CCCB1 /* AppDelegate.swift */,
 				49356C911DC0ABE7003CCCB1 /* Assets.xcassets */,
 				49356C931DC0ABE7003CCCB1 /* MainMenu.xib */,
 				49356C961DC0ABE7003CCCB1 /* Info.plist */,
+				3F0D587D1E1278D100E8F1D8 /* QuotesViewController.swift */,
+				3F0D587E1E1278D100E8F1D8 /* QuotesViewController.xib */,
+				3F0D58811E12F29C00E8F1D8 /* ScreenShot.swift */,
+				3F0D58831E13024300E8F1D8 /* DoAppleScript.swift */,
 			);
 			path = ScreenCapture;
 			sourceTree = "<group>";
@@ -122,6 +194,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3F4E38351E154A320028E8B9 /* LauncherApplication */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3F4E38441E154A330028E8B9 /* Build configuration list for PBXNativeTarget "LauncherApplication" */;
+			buildPhases = (
+				3F4E38321E154A320028E8B9 /* Sources */,
+				3F4E38331E154A320028E8B9 /* Frameworks */,
+				3F4E38341E154A320028E8B9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LauncherApplication;
+			productName = LauncherApplication;
+			productReference = 3F4E38361E154A330028E8B9 /* LauncherApplication.app */;
+			productType = "com.apple.product-type.application";
+		};
 		49356C8B1DC0ABE7003CCCB1 /* ScreenCapture */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49356CAF1DC0ABE7003CCCB1 /* Build configuration list for PBXNativeTarget "ScreenCapture" */;
@@ -129,6 +218,7 @@
 				49356C881DC0ABE7003CCCB1 /* Sources */,
 				49356C891DC0ABE7003CCCB1 /* Frameworks */,
 				49356C8A1DC0ABE7003CCCB1 /* Resources */,
+				3FE6102B1E156569008FA504 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -181,11 +271,25 @@
 		49356C841DC0ABE7003CCCB1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Vuong, Thanh T";
 				TargetAttributes = {
+					3F4E38351E154A320028E8B9 = {
+						CreatedOnToolsVersion = 7.2;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
 					49356C8B1DC0ABE7003CCCB1 = {
 						CreatedOnToolsVersion = 7.0.1;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 					49356C9A1DC0ABE7003CCCB1 = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -213,15 +317,26 @@
 				49356C8B1DC0ABE7003CCCB1 /* ScreenCapture */,
 				49356C9A1DC0ABE7003CCCB1 /* ScreenCaptureTests */,
 				49356CA51DC0ABE7003CCCB1 /* ScreenCaptureUITests */,
+				3F4E38351E154A320028E8B9 /* LauncherApplication */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3F4E38341E154A320028E8B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F4E383D1E154A330028E8B9 /* Assets.xcassets in Resources */,
+				3F4E38401E154A330028E8B9 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		49356C8A1DC0ABE7003CCCB1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F0D58801E1278D100E8F1D8 /* QuotesViewController.xib in Resources */,
 				49356C921DC0ABE7003CCCB1 /* Assets.xcassets in Resources */,
 				49356C951DC0ABE7003CCCB1 /* MainMenu.xib in Resources */,
 			);
@@ -244,11 +359,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3F4E38321E154A320028E8B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F4E38391E154A330028E8B9 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		49356C881DC0ABE7003CCCB1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F0D58841E13024300E8F1D8 /* DoAppleScript.swift in Sources */,
 				49356C901DC0ABE7003CCCB1 /* AppDelegate.swift in Sources */,
+				3F0D58821E12F29D00E8F1D8 /* ScreenShot.swift in Sources */,
+				3F0D587F1E1278D100E8F1D8 /* QuotesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +410,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		3F4E383E1E154A330028E8B9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3F4E383F1E154A330028E8B9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		49356C931DC0ABE7003CCCB1 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -295,6 +429,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		3F4E38421E154A330028E8B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = LauncherApplication/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = VK.LauncherApplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		3F4E38431E154A330028E8B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = LauncherApplication/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = VK.LauncherApplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		49356CAD1DC0ABE7003CCCB1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -379,6 +539,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ScreenCapture/ScreenCapture.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = ScreenCapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -391,6 +552,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ScreenCapture/ScreenCapture.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = ScreenCapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -454,6 +616,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3F4E38441E154A330028E8B9 /* Build configuration list for PBXNativeTarget "LauncherApplication" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F4E38421E154A330028E8B9 /* Debug */,
+				3F4E38431E154A330028E8B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		49356C871DC0ABE7003CCCB1 /* Build configuration list for PBXProject "ScreenCapture" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -470,6 +641,7 @@
 				49356CB11DC0ABE7003CCCB1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		49356CB21DC0ABE7003CCCB1 /* Build configuration list for PBXNativeTarget "ScreenCaptureTests" */ = {
 			isa = XCConfigurationList;
@@ -478,6 +650,7 @@
 				49356CB41DC0ABE7003CCCB1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		49356CB51DC0ABE7003CCCB1 /* Build configuration list for PBXNativeTarget "ScreenCaptureUITests" */ = {
 			isa = XCConfigurationList;
@@ -486,6 +659,7 @@
 				49356CB71DC0ABE7003CCCB1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
