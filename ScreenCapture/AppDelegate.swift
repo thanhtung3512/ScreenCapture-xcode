@@ -72,6 +72,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Check LicenseID.txt exist, Otherwise create a new file and generate a new license ID
         applicationSupportDirectory = "\(NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!)/ScreenCapture"
+        print(applicationSupportDirectory)
         applicationLogDirectory = applicationSupportDirectory.stringByReplacingOccurrencesOfString("Application Support", withString: "Logs")
         // Check Support Folder exists
         checkSupportFolderExistence()
@@ -138,8 +139,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 try filemanager.createDirectoryAtPath("\(applicationSupportDirectory)", withIntermediateDirectories: true, attributes: nil)
                 print("Support Folder created")
             }
-            catch {
+            catch let error as NSError{
                 // Exception
+                writeLog("Can not create Support Folder \(error.localizedDescription)")
             }
         }
         if !filemanager.fileExistsAtPath("\(applicationLogDirectory)"){
@@ -147,8 +149,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 try filemanager.createDirectoryAtPath("\(applicationLogDirectory)", withIntermediateDirectories: true, attributes: nil)
                 print("Log Folder created")
             }
-            catch {
+            catch let error as NSError{
                 // Exception
+                writeLog("Can not create Log Folder \(error.localizedDescription)")
             }
         }
         if !filemanager.fileExistsAtPath("\(applicationSupportDirectory)/temp"){
@@ -156,8 +159,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 try filemanager.createDirectoryAtPath("\(applicationSupportDirectory)/temp", withIntermediateDirectories: true, attributes: nil)
                 print("Temp Folder created")
             }
-            catch {
+            catch let error as NSError {
                 // Exception
+                writeLog("Can not create Temp Folder \(error.localizedDescription)")
             }
         }
         if !filemanager.fileExistsAtPath("\(applicationSupportDirectory)/extra"){
@@ -165,8 +169,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 try filemanager.createDirectoryAtPath("\(applicationSupportDirectory)/extra", withIntermediateDirectories: true, attributes: nil)
                 print("Extra Folder created")
             }
-            catch {
+            catch let error as NSError {
                 // Exception
+                writeLog("Can not create Extra Folder \(error.localizedDescription)")
             }
         }
         
@@ -186,7 +191,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     do {
                         try self.licenseid.writeToFile("\(self.applicationSupportDirectory)/LicenseID.txt", atomically: true, encoding: NSUTF8StringEncoding)
                     }
-                    catch {/* error handling here */}
+                    catch let error as NSError {
+                        /* error handling here */
+                        self.writeLog("Can not write to LicenseID.txt \(error.localizedDescription)")
+                    }
                 }
             }
         }
@@ -264,6 +272,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 catch let error as NSError {
                     //print("--------------------------------\(error)")
+                    self.writeLog("Server Unreachable \(error.localizedDescription)")
                     self.countdown_waittosenddata = self.thirtySeconds
                     if self.LOG_CONDITION{
                         if let button = self.statusItem.button {
@@ -315,7 +324,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 try (NSString(data: json, encoding: NSUTF8StringEncoding)! as String).writeToFile("\(applicationSupportDirectory)/extra/\(screenshotName).txt", atomically: true, encoding: NSUTF8StringEncoding)
             }
         }
-        catch {/* error handling here */}
+        catch let error as NSError {
+            /* error handling here */
+            writeLog("Error when create screenshots/logs \(error.localizedDescription)")
+        }
         
         priorInput.removeAll()
     }
@@ -354,7 +366,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let logDataAsJSON = try NSJSONSerialization.dataWithJSONObject(logDataAsDict!, options: .PrettyPrinted)
             logDataAsText = (NSString(data: logDataAsJSON, encoding: NSUTF8StringEncoding)! as String)
         }
-        catch{}
+        catch let error as NSError{
+            writeLog("Error mapping LogData to JSON Format \(error.localizedDescription)")
+        }
         
         print(logDataAsText! as String)
         let parametersDictionary = [
@@ -403,11 +417,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 catch let error as NSError {
                     print("Ooops! Something went wrong: \(error)")
+                    self.writeLog("Error removing temp/extra file \(error.localizedDescription)")
                     self.waitforresponse = false;
                 }
             }
             else {
-                print("Ooops! Something went wrong)")
+                self.writeLog("file not uploaded")
                 self.waitforresponse = false;
             }
             
@@ -471,7 +486,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         {
             ipAddress = try String(contentsOfURL: ipifyurl, encoding: NSUTF8StringEncoding)
         }
-        catch {}*/
+        catch let error as NSError let error as NSError {}*/
     }
     
     func HTTPsendRequest(request: NSMutableURLRequest,callback: (String, String?) -> Void) {
@@ -502,6 +517,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String:AnyObject]
             } catch let error as NSError {
                 print(error)
+                writeLog("Error convert String to Dictionary/JSON \(error.localizedDescription)")
             }
         }
         return nil
@@ -511,7 +527,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             try text.writeToFile("\(self.applicationLogDirectory)/\(NSDate().timeIntervalSince1970).log", atomically: true, encoding: NSUTF8StringEncoding)
         }
-        catch {/* error handling here */}
+        catch let error as NSError {
+            /* error handling here */
+        }
     }
     
     func createBodyWithBoundary(boundary: String, parameters: [NSObject : AnyObject], imageData: NSData, filename: String) -> NSData {

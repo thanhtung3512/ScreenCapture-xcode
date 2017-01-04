@@ -95,7 +95,7 @@ class DoAppleScript: NSObject {
     }
     
     func execute(appScript: String) -> String {
-        let task = NSTask()
+        /*let task = NSTask()
         task.launchPath = "/usr/bin/osascript"
         task.arguments = ["-e \(appScript)"]
         
@@ -105,11 +105,11 @@ class DoAppleScript: NSObject {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output: String = NSString(data: data, encoding: NSASCIIStringEncoding)! as String
         
-        return output
-        /*var error: NSDictionary?
+        return output*/
+        var error: NSDictionary?
         scriptObject = NSAppleScript(source: appScript)!
         let output = scriptObject.executeAndReturnError(&error)
-        /*if(error != nil)
+        if(error != nil)
         {
             print("error: \(error)")
             return "error"
@@ -136,7 +136,7 @@ class DoAppleScript: NSObject {
                 print("error: \(error)")
                 return "error"
             }
-        }*/*/*/
+        }*/
         //return ""
     }
 }
