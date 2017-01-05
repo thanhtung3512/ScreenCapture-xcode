@@ -18,7 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
     let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-2)
     let twoSeconds = 2
-    let thirtySeconds = 30
+    let thirtySeconds = 5
     var countdown_waitforinput = 0
     var countdown_waittosenddata = 0
     var timer_waitforinput: NSTimer? = NSTimer()
@@ -37,9 +37,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let screen = ScreenShot()
     var applicationSupportDirectory = String("")
     var applicationLogDirectory = String("")
-    
+    // Acccessability enable params
+    var accessibilityEnabled = Bool(false)
+    var alertAccessabilityEnabledDispatched = Bool(false)
+    let alertMsgForAccessabilityEnabled = NSAlert()
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        // Enable Accessibility params
+        accessibilityEnabled = AXIsProcessTrustedWithOptions(
+            [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true])
+        alertMsgForAccessabilityEnabled.messageText = "Please enable ScreenCapture Using Accessibility feature"
+        alertMsgForAccessabilityEnabled.informativeText = "Please be aware that enable app in Accessibility will give permission to the app to monitor keystroke and mouse click. The app DOES NOT record your keystroke, only to detect your keystroke anonymously as input signal to capture screenshots. You can enable ScreenCapture service in System Preferences->Security and Privacy -> Accessibility. And then press 'OK' "
+        
         //Launcher Application setting
         let launcherAppIdentifier = "VK.LauncherApplication"
         //set launcher to login items for auto turn on upon start up
@@ -85,6 +94,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var inputEventMonitor: AnyObject!
         inputEventMonitor = NSEvent.addGlobalMonitorForEventsMatchingMask((NSEventMask:[.KeyDownMask,.LeftMouseUpMask,.RightMouseUpMask,.OtherMouseUpMask,.ScrollWheelMask]), handler: {(event: NSEvent) -> Void in
 //////////// MAIN LOGGING EVENT BASED ON USER INPUT ///////////////////////////////////////////
+            self.accessibilityEnabled = AXIsProcessTrustedWithOptions(
+                [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true])
+            print("Accessability status: \(self.accessibilityEnabled)")
+            if !self.accessibilityEnabled {
+                return
+                
+            }
             if self.LOG_CONDITION {
                 self.countdown_waitforinput = self.twoSeconds
                 self.timer_waitforinput?.invalidate()
@@ -215,11 +231,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         countdown_waitforinput--
     }
     
+    func dispatchAlert() -> Void{
+        //NSRunningApplication.currentApplication().activateWithOptions(NSApplicationActivationOptions.ActivateIgnoringOtherApps)
+        let response = alertMsgForAccessabilityEnabled.runModal()
+        if (response == NSModalResponseCancel) {
+            print("Exit alertAccessabilityEnabledDispatched")
+            alertAccessabilityEnabledDispatched = false
+            self.countdown_waittosenddata = self.thirtySeconds
+        }
+        else
+        {
+            alertAccessabilityEnabledDispatched = true
+        }
+    }
+    
     func doAutoSendData() {
         let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
         if self.countdown_waittosenddata == 0 {
             self.countdown_waittosenddata--
-            
+            // Accessability Control
+            self.accessibilityEnabled = AXIsProcessTrustedWithOptions(
+                [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true])
+            print(self.accessibilityEnabled)
+            if !self.accessibilityEnabled {
+                print("Alert: \(self.alertAccessabilityEnabledDispatched)")
+                if !self.alertAccessabilityEnabledDispatched{
+                    self.dispatchAlert()
+                }
+                return
+            }
             // Get public IP Address
             if(self.publicIPAddress == "")
             {self.doGetIpPublic()}
