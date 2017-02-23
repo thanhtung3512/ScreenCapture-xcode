@@ -9,6 +9,7 @@
 import Cocoa
 
 class QuotesViewController: NSViewController {
+    @IBOutlet weak var QuitApplicationButton: NSButton!
     @IBOutlet weak var reminder: NSTextField!
     @IBOutlet weak var licenseidTextField: NSTextField!
     var quotes = ["1","2","3"]
@@ -20,12 +21,16 @@ class QuotesViewController: NSViewController {
             quotes[0] = try! NSString(contentsOfFile: "\(applicationSupportDirectory)/LicenseID.txt", encoding: NSUTF8StringEncoding) as String
             print("File exists")
         }
+        QuitApplicationButton.action = Selector("QuitApplication:")
         // Do view setup here.
     }
     var currentQuoteIndex: Int = 0 {
         didSet {
             updateQuote()
         }
+    }
+    func QuitApplication(sender: AnyObject){
+        exit(0)
     }
     func updateQuote() {
         licenseidTextField.stringValue = quotes[currentQuoteIndex] as String

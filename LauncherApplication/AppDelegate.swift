@@ -19,7 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var alreadyRunning = false
         
         for app in running{
-            print(app.bundleIdentifier)
+            //print(app.bundleIdentifier)
             if app.bundleIdentifier == mainAppIdentifier {
                 alreadyRunning = true
                 break
@@ -30,12 +30,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSDistributedNotificationCenter.defaultCenter().addObserver(self, selector: "terminate", name: "killme", object: mainAppIdentifier)
             let path = NSBundle.mainBundle().bundlePath as NSString
             var components = path.pathComponents
+            
             components.removeLast()
-            //components.removeLast()
-            //components.removeLast()
+            components.removeLast()
+            components.removeLast()
             //components.removeAll()
             //components.append("/")
             //components.append("Applications")
+            components.append("MacOS")
             components.append("ScreenCapture")
             
             let newPath = NSString.pathWithComponents(components)

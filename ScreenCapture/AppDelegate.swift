@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var timer_waitforinput: NSTimer? = NSTimer()
     var timer_waittosenddata: NSTimer? = NSTimer()
     var priorInput = [Dictionary<String, String>]()
+    var amountOfKeystroke = Int(0)
     var switchtype = String("")
     var licenseid = String("")
     var waitforresponse = Bool(false)
@@ -43,20 +44,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let alertMsgForAccessabilityEnabled = NSAlert()
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Enable Accessibility params
-        accessibilityEnabled = AXIsProcessTrustedWithOptions(
-            [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true])
-        alertMsgForAccessabilityEnabled.messageText = "Please enable ScreenCapture Using Accessibility feature"
-        alertMsgForAccessabilityEnabled.informativeText = "Please be aware that enable app in Accessibility will give permission to the app to monitor keystroke and mouse click. The app DOES NOT record your keystroke, only to detect your keystroke anonymously as input signal to capture screenshots. You can enable ScreenCapture service in System Preferences->Security and Privacy -> Accessibility. And then press 'OK' "
         
         //Launcher Application setting
         let launcherAppIdentifier = "VK.LauncherApplication"
         //set launcher to login items for auto turn on upon start up
-        var ret = SMLoginItemSetEnabled(launcherAppIdentifier, false)
+        let ret = SMLoginItemSetEnabled(launcherAppIdentifier, true)
         //print(ret)
+        /*let running = NSWorkspace.sharedWorkspace().runningApplications
+        var alreadyRunning = false
+        let mainAppIdentifier = "UH.ScreenCapture"
+        
+        for app in running{
+            if app.bundleIdentifier == mainAppIdentifier {
+            //print(app.bundleIdentifier)
+            }
+        }*/
+        //let path = NSBundle.mainBundle().bundlePath as NSString
+        //var components = path.pathComponents
+        ////print(components.joinWithSeparator(" "))
         var startedAtLogin = false
         for app in NSWorkspace.sharedWorkspace().runningApplications{
+            //self.writeLog(app.bundleIdentifier! as String)
+            ////print(app.bundleURL)
             if app.bundleIdentifier == launcherAppIdentifier{
+                ////print(app.bundleIdentifier)
                 startedAtLogin = true
             }
         }
@@ -65,6 +76,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSDistributedNotificationCenter.defaultCenter().postNotificationName("killme", object: NSBundle.mainBundle().bundleIdentifier!)
         }
         
+        // Enable Accessibility params
+        accessibilityEnabled = AXIsProcessTrustedWithOptions(
+            [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true])
+        alertMsgForAccessabilityEnabled.messageText = "Please enable ScreenCapture Using Accessibility feature"
+        alertMsgForAccessabilityEnabled.informativeText = "Please be aware that enable app in Accessibility will give permission to the app to monitor keystroke and mouse click. The app DOES NOT record your keystroke, only to detect your keystroke anonymously as input signal to capture screenshots. You can enable ScreenCapture service in System Preferences->Security and Privacy -> Accessibility. And then press 'OK' "
+
         // popup menu params
         popover.contentViewController = notification
         eventMonitor = EventMonitor(mask:[.LeftMouseDownMask,.RightMouseDownMask]) { [unowned self] event in
@@ -73,15 +90,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         eventMonitor?.start()
-        //print(NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!)
+        ////print(NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!)
         
         // Get public IP Address
         if(self.publicIPAddress == "")
-        {self.doGetIpPublic()}
+        {
+            self.doGetIpPublic()
+        }
         
         // Check LicenseID.txt exist, Otherwise create a new file and generate a new license ID
         applicationSupportDirectory = "\(NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!)/ScreenCapture"
-        print(applicationSupportDirectory)
+        //print(applicationSupportDirectory)
         applicationLogDirectory = applicationSupportDirectory.stringByReplacingOccurrencesOfString("Application Support", withString: "Logs")
         // Check Support Folder exists
         checkSupportFolderExistence()
@@ -94,13 +113,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var inputEventMonitor: AnyObject!
         inputEventMonitor = NSEvent.addGlobalMonitorForEventsMatchingMask((NSEventMask:[.KeyDownMask,.LeftMouseUpMask,.RightMouseUpMask,.OtherMouseUpMask,.ScrollWheelMask]), handler: {(event: NSEvent) -> Void in
 //////////// MAIN LOGGING EVENT BASED ON USER INPUT ///////////////////////////////////////////
-            self.accessibilityEnabled = AXIsProcessTrustedWithOptions(
-                [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true])
-            print("Accessability status: \(self.accessibilityEnabled)")
-            if !self.accessibilityEnabled {
-                return
+            //self.accessibilityEnabled = AXIsProcessTrustedWithOptions(
+                //[kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true])
+            ////print("Accessability status: \(self.accessibilityEnabled)")
+            //if !self.accessibilityEnabled {
+            //    return
                 
-            }
+            //}
             if self.LOG_CONDITION {
                 self.countdown_waitforinput = self.twoSeconds
                 self.timer_waitforinput?.invalidate()
@@ -116,19 +135,58 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     case 4:
                         self.priorInput.append(["type":"MouseRClick","time":"\(NSDate().timeIntervalSince1970)","detail":"\(event)"])
                     case 22:
-                        self.priorInput.append(["type":"ScrollWheel","time":"\(NSDate().timeIntervalSince1970)","detail":"\(event)"])
+                        self.priorInput.append(["type":"ScrollWheel","time":"\(NSDate().timeIntervalSince1970)","detail":""])
                     default:
                         self.priorInput.append(["type":"","time":"\(NSDate().timeIntervalSince1970)","detail":"\(event)"])
                     }
+                    self.amountOfKeystroke++
                     
-                    self.timer_waitforinput = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "doWaitForInput", userInfo: nil, repeats: true)
+                    if self.amountOfKeystroke > 81 {// 1 sentence
+                        self.priorInput.removeAll()
+                        self.switchtype = "UserIsTyping"
+                        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                        // Record all computer logs
+                        let screenshotName = "\(NSDate().timeIntervalSince1970)"
+                        let logDataContent = ["url":"\(self.screen.getURL())",
+                            "appname":"\(self.screen.getAppName())",
+                            "title":"\(self.screen.getTitle())",
+                            "filename":"\(screenshotName)",
+                            "ipaddress":self.publicIPAddress,
+                            "switchtype":"\(self.switchtype)",
+                            "priorinput":self.priorInput]
+                        //"licenseid":"\(self.licenseid)"]
+                        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                            self.screenShot(logDataContent)
+                        }
+                        self.amountOfKeystroke = 0
+                    }
+                    else
+                    {
+                        self.timer_waitforinput = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "doWaitForInput", userInfo: nil, repeats: true)
+                    }
                 }
                 else
                 {
-                    self.priorInput.removeAll()
+                    //self.priorInput.removeAll()
+                    //add event to priorInput
+                    self.priorInput.append(["type":self.switchtype,"time":"\(NSDate().timeIntervalSince1970)","detail":""])
                     let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                    // Record all computer logs
+                    let screenshotName = "\(NSDate().timeIntervalSince1970)"
+                    let logDataContent = ["url":"\(self.screen.getURL())",
+                        "appname":"\(self.screen.getAppName())",
+                        "title":"\(self.screen.getTitle())",
+                        "filename":"\(screenshotName)",
+                        "ipaddress":self.publicIPAddress,
+                        "switchtype":"\(self.switchtype)",
+                        "priorinput":self.priorInput]
+                    
+                    // Wait for further input, otherwise fire screen capture
+                    //self.timer_waitforinput = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "doWaitForInput", userInfo: nil, repeats: true)
+                    
+                    // Immediate screenshot upon window switch
                     dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                        self.screenShot()
+                        self.screenShot(logDataContent)
                     }
                 }
             }
@@ -153,7 +211,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !filemanager.fileExistsAtPath("\(applicationSupportDirectory)"){
             do {
                 try filemanager.createDirectoryAtPath("\(applicationSupportDirectory)", withIntermediateDirectories: true, attributes: nil)
-                print("Support Folder created")
+                //print("Support Folder created")
             }
             catch let error as NSError{
                 // Exception
@@ -163,7 +221,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !filemanager.fileExistsAtPath("\(applicationLogDirectory)"){
             do {
                 try filemanager.createDirectoryAtPath("\(applicationLogDirectory)", withIntermediateDirectories: true, attributes: nil)
-                print("Log Folder created")
+                //print("Log Folder created")
             }
             catch let error as NSError{
                 // Exception
@@ -173,7 +231,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !filemanager.fileExistsAtPath("\(applicationSupportDirectory)/temp"){
             do {
                 try filemanager.createDirectoryAtPath("\(applicationSupportDirectory)/temp", withIntermediateDirectories: true, attributes: nil)
-                print("Temp Folder created")
+                //print("Temp Folder created")
             }
             catch let error as NSError {
                 // Exception
@@ -183,7 +241,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !filemanager.fileExistsAtPath("\(applicationSupportDirectory)/extra"){
             do {
                 try filemanager.createDirectoryAtPath("\(applicationSupportDirectory)/extra", withIntermediateDirectories: true, attributes: nil)
-                print("Extra Folder created")
+                //print("Extra Folder created")
             }
             catch let error as NSError {
                 // Exception
@@ -194,15 +252,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Check License File exists
         if filemanager.fileExistsAtPath("\(applicationSupportDirectory)/LicenseID.txt") {
             licenseid = try! NSString(contentsOfFile: "\(applicationSupportDirectory)/LicenseID.txt", encoding: NSUTF8StringEncoding) as String
-            print("File exists")
+            //print("File exists")
         } else {
-            print("File not found")
-            licenseid = NSUUID().UUIDString
+            //print("File not found")
+            // generate licenseid random
+            //licenseid = NSUUID().UUIDString
+            //generate licenseid MAC address
+            licenseid = macSerialNumber()
             // Register LicenseID on system if not yet registered
             self.HTTPGet("https://reknowdesktopsurveillance.hiit.fi/createlicenseid.php?licenseid=\(licenseid)", requestInterval: 2) {
                 (data: String, error: String?) -> Void in
                 if error != nil {
-                    print(error)
+                    //print(error)
                 } else {
                     do {
                         try self.licenseid.writeToFile("\(self.applicationSupportDirectory)/LicenseID.txt", atomically: true, encoding: NSUTF8StringEncoding)
@@ -221,12 +282,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             timer_waitforinput?.invalidate()
             countdown_waitforinput = twoSeconds
             let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+            // Record all computer logs
+            let screenshotName = "\(NSDate().timeIntervalSince1970)"
+            let logDataContent = ["url":"\(self.screen.getURL())",
+                "appname":"\(self.screen.getAppName())",
+                "title":"\(self.screen.getTitle())",
+                "filename":"\(screenshotName)",
+                "ipaddress":self.publicIPAddress,
+                "switchtype":"\(self.switchtype)",
+                "priorinput":self.priorInput]
             dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                self.screenShot()
+                self.screenShot(logDataContent)
             }
         }
         else{
-            print("time eslapsed for further INPUT \(countdown_waitforinput)")
+            //print("time eslapsed for further INPUT \(countdown_waitforinput)")
         }
         countdown_waitforinput--
     }
@@ -235,7 +305,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //NSRunningApplication.currentApplication().activateWithOptions(NSApplicationActivationOptions.ActivateIgnoringOtherApps)
         let response = alertMsgForAccessabilityEnabled.runModal()
         if (response == NSModalResponseCancel) {
-            print("Exit alertAccessabilityEnabledDispatched")
+            //print("Exit alertAccessabilityEnabledDispatched")
             alertAccessabilityEnabledDispatched = false
             self.countdown_waittosenddata = self.thirtySeconds
         }
@@ -250,16 +320,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if self.countdown_waittosenddata == 0 {
             self.countdown_waittosenddata--
             // Accessability Control
-            self.accessibilityEnabled = AXIsProcessTrustedWithOptions(
+            /*self.accessibilityEnabled = AXIsProcessTrustedWithOptions(
                 [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true])
-            print(self.accessibilityEnabled)
+            //print(self.accessibilityEnabled)
             if !self.accessibilityEnabled {
-                print("Alert: \(self.alertAccessabilityEnabledDispatched)")
+                //print("Alert: \(self.alertAccessabilityEnabledDispatched)")
                 if !self.alertAccessabilityEnabledDispatched{
                     self.dispatchAlert()
                 }
                 return
-            }
+            }*/
             // Get public IP Address
             if(self.publicIPAddress == "")
             {self.doGetIpPublic()}
@@ -276,42 +346,42 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
             dispatch_async(dispatch_get_global_queue(priority, 0)) {
                 // CHECK LICENSE ID VALID TO PROCEED
-                //print("this is id \(licenseid)")
+                ////print("this is id \(licenseid)")
                 //let requestURL = "https://reknowdesktopsurveillance.hiit.fi/checklicenseid.php?licenseid=\(self.licenseid)"
                 
                 let requestURL = NSURL(string: "https://reknowdesktopsurveillance.hiit.fi/checklicenseid.php?licenseid=\(self.licenseid)")!
                 do
                 {
                     let data = try String(contentsOfURL: requestURL, encoding: NSUTF8StringEncoding)
-                    //print(data)
+                    ////print(data)
                     if (self.convertStringToDictionary(data)!["hits"]!["total"] as! Int) == 1 {
                         while let file = files?.nextObject() {
                             if index < 10 && file.hasSuffix("jpeg") {
                                 var counter = 0
                                 let filename = file.stringByReplacingOccurrencesOfString(".jpeg", withString: "")
                                 // sending data to backend
-                                //print("file: \(filename)")
+                                ////print("file: \(filename)")
                                 self.sendDataToServer(filename)
                                 while self.waitforresponse {
-                                    print("SLEEP!!!!! \(counter)")
+                                    //print("SLEEP!!!!! \(counter)")
                                     sleep(1)
                                     counter++
                                 }
                             }
                             index++
                         }
-                        //print("correct ID")
+                        ////print("correct ID")
                         self.countdown_waittosenddata = self.thirtySeconds
                     }
                     else
                     {
-                        //print("wrong ID")
+                        ////print("wrong ID")
                         self.countdown_waittosenddata = self.thirtySeconds
                     }
                     
                 }
                 catch let error as NSError {
-                    //print("--------------------------------\(error)")
+                    ////print("--------------------------------\(error)")
                     self.writeLog("Server Unreachable \(error.localizedDescription)")
                     self.countdown_waittosenddata = self.thirtySeconds
                     if self.LOG_CONDITION{
@@ -328,7 +398,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         else{
             if self.countdown_waittosenddata > 0{
-                print("time eslapsed for send data \(self.countdown_waittosenddata)")
+                //print("time eslapsed for send data \(self.countdown_waittosenddata)")
                 self.countdown_waittosenddata--
             }
         }
@@ -341,20 +411,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     
-    func screenShot(){
-        print(self.switchtype)
+    func screenShot(logDataContent: NSDictionary){
+        //print(self.switchtype)
         // Take screenshot active window
-        let screenshotName = "\(NSDate().timeIntervalSince1970)"
+        let screenshotName = logDataContent["filename"] as! String
         self.screen.screenShot("\(applicationSupportDirectory)/temp/\(screenshotName).jpeg")
-        // Recordd all computer logs
-        let logDataContent = ["url":"\(self.screen.getURL())",
-            "appname":"\(self.screen.getAppName())",
-            "title":"\(self.screen.getTitle())",
-            "filename":"\(screenshotName)",
-            "ipaddress":self.publicIPAddress,
-            "switchtype":"\(self.switchtype)",
-            "priorinput":self.priorInput]
-            //"licenseid":"\(self.licenseid)"]
         
         do {
             // ENSURE screenshot file co-exist with log file
@@ -374,7 +435,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func sendDataToServer(fname: String) {
         self.waitforresponse = true
-        print("Waiting to send Data for FILE: \(fname)")
+        //print("Waiting to send Data for FILE: \(fname)")
         // Check co-existence of log file and screenshot
         let filemanager:NSFileManager = NSFileManager()
         if !filemanager.fileExistsAtPath("\(applicationSupportDirectory)/temp/\(fname).jpeg") || !filemanager.fileExistsAtPath("\(applicationSupportDirectory)/extra/\(fname).txt"){
@@ -396,7 +457,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let image = NSImage(contentsOfFile: "\(applicationSupportDirectory)/temp/\(fname).jpeg")
         var imageData = image!.TIFFRepresentation
         let imageRep = NSBitmapImageRep(data: imageData!)
-        let compressionFactor = Int(0.1)
+        let compressionFactor = Int(1)
         let imageProps = [ NSImageCompressionFactor : compressionFactor ]
         imageData = imageRep!.representationUsingType(NSBitmapImageFileType.NSJPEGFileType, properties: imageProps)
         
@@ -410,7 +471,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             writeLog("Error mapping LogData to JSON Format \(error.localizedDescription)")
         }
         
-        print(logDataAsText! as String)
+        //print(logDataAsText! as String)
         let parametersDictionary = [
             "extra": logDataAsText! as String,
             "username": self.licenseid
@@ -424,7 +485,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let data, let response, let error) in
             
             guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
-                print("Server Unreachable")
+                //print("Server Unreachable")
                 self.waitforresponse = false;
                 // SET ICON WARNING
                 if self.LOG_CONDITION{
@@ -456,13 +517,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
                 catch let error as NSError {
-                    print("Ooops! Something went wrong: \(error)")
+                    //print("Ooops! Something went wrong: \(error)")
                     self.writeLog("Error removing temp/extra file \(error.localizedDescription)")
                     self.waitforresponse = false;
                 }
             }
             else {
                 self.writeLog("file not uploaded")
+                print(dataString)
                 self.waitforresponse = false;
             }
             
@@ -473,7 +535,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // change image button to pause or resume
     func pauseOrResumeLog(sender: AnyObject){
-        //print("pause clicked")
+        ////print("pause clicked")
         self.countdown_waitforinput = self.twoSeconds
         self.countdown_waittosenddata = self.thirtySeconds
         self.timer_waitforinput?.invalidate()
@@ -515,7 +577,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             (data: String, error: String?) -> Void in
             if error != nil {
                 ipAddress = error! as String
-                print("aaa \(error)")
+                //print("aaa \(error)")
             } else {
                 ipAddress = data as String
                 self.publicIPAddress = ipAddress
@@ -556,7 +618,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             do {
                 return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String:AnyObject]
             } catch let error as NSError {
-                print(error)
+                //print(error)
                 writeLog("Error convert String to Dictionary/JSON \(error.localizedDescription)")
             }
         }
